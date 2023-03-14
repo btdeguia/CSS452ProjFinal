@@ -49,8 +49,8 @@ function update() {
 ## Demo 
 <b>NOTE</b>: For any demos accessed, AT LEAST ONE XBox controller with standard layout is required <br><br>
 Preliminary Demo (Single Controller): https://btdeguia.github.io/CSS452Proj/ <br><br>
-Final Demo (4-Player Pong): https://btdeguia.github.io/CSS452ProjFinal/
-
+Final Demo (4-Player Pong): https://btdeguia.github.io/CSS452ProjFinal/ <br>
+Developer Controls: all key bindings listed on the demo for the controller can be used by pressing the same key on a keyboard
 
 ## Conclusion 
 ### Strengths: 
