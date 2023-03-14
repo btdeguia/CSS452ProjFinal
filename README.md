@@ -1,4 +1,3 @@
-
 # (Multi) Controller Support SDK
 ##### Epic Gamers: Brandon DeGuia, Pranshu Bhardwaj, Tony Le 
 ##### CSS 452
@@ -48,7 +47,10 @@ function update() {
 
 
 ## Demo 
-Add demo here 
+<b>NOTE</b>: For any demos accessed, AT LEAST ONE XBox controller with standard layout is required <br><br>
+Preliminary Demo (One Controller): https://btdeguia.github.io/CSS452Proj/ <br><br>
+Final Demo (4-Player Pong): https://btdeguia.github.io/CSS452ProjFinal/
+
 
 ## Conclusion 
 ### Strengths: 
@@ -58,3 +60,9 @@ Add demo here
 ### Weakness: 
 - Due to the limitations of the JavaScript Gamepad class, controllers retain their position in the 'player heirarchy' when unplugged/plugged in. For example, if two controllers are plugged in, and controller 0 is unplugged and plugged back in, it will still be in the 0 index. Controller 1 will not be promoted to index 0. This can cause problems with user implementation, but it is out of the developers' hands as this is a JavaScript built-in class they cannot modify.
 - API ONLY supports XBox standard controller layout. No other controllers at this time
+
+
+## Special Thanks/Acknowledgements
+This project was created for CSS 452: Game Engine Development at the University of Washington, Bothell. Special thanks to Professor Kelvin Sung for advising this project,<br><br>
+The majority of this code is from Build Your Own 2D Game Engine, 2nd Edition. Credit goes to the authors. Check it out here: https://apress.github.io/build-your-own-2d-game-engine-2e/<br><br>
+Some code was written using the JavaScript Gamepad API, documentation here: https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API <br><br>
