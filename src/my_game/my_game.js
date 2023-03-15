@@ -87,10 +87,8 @@ class MyGame extends engine.Scene {
     // This is the draw function, make sure to setup proper drawing environment, and more
     // importantly, make sure to _NOT_ change any state.
     draw() {
-        // Step A: clear the canvas
         engine.clearCanvas([0.9, 0.9, 0.9, 1.0]); // clear to light gray
 
-        // Step  B: Activate the drawing Camera
         this.mCamera.setViewAndCameraMatrix();
 
         this.mBall.draw(this.mCamera);
@@ -149,16 +147,16 @@ class MyGame extends engine.Scene {
             this.goal(this.lastPlayerTouched);
         }
 
-        if (engine.input.isButtonClicked(0, engine.input.buttons.A)) { // start
+        if (engine.input.isControllerButtonClicked(0, engine.input.buttons.A)) { // start
             this.startGame();
         }
-        if (engine.input.isButtonClicked(0, engine.input.buttons.B)) { // reset
+        if (engine.input.isControllerButtonClicked(0, engine.input.buttons.B)) { // reset
             this.loadGame();
         }
-        if (engine.input.isButtonClicked(0, engine.input.buttons.X)) { // pause
+        if (engine.input.isControllerButtonClicked(0, engine.input.buttons.X)) { // pause
             this.pause();
         }
-        if (engine.input.isButtonClicked(0, engine.input.buttons.Y)) { // play
+        if (engine.input.isControllerButtonClicked(0, engine.input.buttons.Y)) { // play
             this.play();
         }
         if (engine.input.isKeyClicked(engine.input.keys.A)) { // start
@@ -175,100 +173,100 @@ class MyGame extends engine.Scene {
         }
 
 
-        // if (engine.input.isButtonClicked(0, engine.input.buttons.B)) {
+        // if (engine.input.isControllerButtonClicked(0, engine.input.buttons.B)) {
         //     console.log("B button Clicked");
         // }
-        // if (engine.input.isButtonReleased(0, engine.input.buttons.B)) {
+        // if (engine.input.isControllerButtonReleased(0, engine.input.buttons.B)) {
         //     console.log("B button Released");
         // }
-        // if (engine.input.isButtonClicked(0, engine.input.buttons.A)) {
+        // if (engine.input.isControllerButtonClicked(0, engine.input.buttons.A)) {
         //     console.log("A button Clicked");
         // }
-        // if (engine.input.isButtonReleased(0, engine.input.buttons.A)) {
+        // if (engine.input.isControllerButtonReleased(0, engine.input.buttons.A)) {
         //     console.log("A button Released");
         // }
-        // if (engine.input.isButtonClicked(0, engine.input.buttons.X)) {
+        // if (engine.input.isControllerButtonClicked(0, engine.input.buttons.X)) {
         //     console.log("X button Clicked");
         // }
-        // if (engine.input.isButtonReleased(0, engine.input.buttons.X)) {
+        // if (engine.input.isControllerButtonReleased(0, engine.input.buttons.X)) {
         //     console.log("X button Released");
         // }
-        // if (engine.input.isButtonClicked(0, engine.input.buttons.Y)) {
+        // if (engine.input.isControllerButtonClicked(0, engine.input.buttons.Y)) {
         //     console.log("Y button Clicked");
         // }
-        // if (engine.input.isButtonReleased(0, engine.input.buttons.Y)) {
+        // if (engine.input.isControllerButtonReleased(0, engine.input.buttons.Y)) {
         //     console.log("Y button Released");
         // }
-        // if (engine.input.isButtonClicked(0, engine.input.buttons.LeftBumper)) {
+        // if (engine.input.isControllerButtonClicked(0, engine.input.buttons.LeftBumper)) {
         //     console.log("LeftBumper Clicked");
         // }
-        // if (engine.input.isButtonReleased(0, engine.input.buttons.LeftBumper)) {
+        // if (engine.input.isControllerButtonReleased(0, engine.input.buttons.LeftBumper)) {
         //     console.log("LeftBumper Released");
         // }
-        // if (engine.input.isButtonClicked(0, engine.input.buttons.RightBumper)) {
+        // if (engine.input.isControllerButtonClicked(0, engine.input.buttons.RightBumper)) {
         //     console.log("RightBumper Clicked");
         // }
-        // if (engine.input.isButtonReleased(0, engine.input.buttons.RightBumper)) {
+        // if (engine.input.isControllerButtonReleased(0, engine.input.buttons.RightBumper)) {
         //     console.log("RightBumper Released");
         // }
-        // if (engine.input.isButtonClicked(0, engine.input.buttons.LeftTrigger)) {
+        // if (engine.input.isControllerButtonClicked(0, engine.input.buttons.LeftTrigger)) {
         //     console.log("LeftTrigger Clicked");
         // }
-        // if (engine.input.isButtonReleased(0, engine.input.buttons.LeftTrigger)) {
+        // if (engine.input.isControllerButtonReleased(0, engine.input.buttons.LeftTrigger)) {
         //     console.log("LeftTrigger Released");
         // }
-        // if (engine.input.isButtonClicked(0, engine.input.buttons.RightTrigger)) {
+        // if (engine.input.isControllerButtonClicked(0, engine.input.buttons.RightTrigger)) {
         //     console.log("RightTrigger Clicked");
         // }
-        // if (engine.input.isButtonReleased(0, engine.input.buttons.RightTrigger)) {
+        // if (engine.input.isControllerButtonReleased(0, engine.input.buttons.RightTrigger)) {
         //     console.log("RightTrigger Released");
         // }
-        // if (engine.input.isButtonClicked(0, engine.input.buttons.Back)) {
+        // if (engine.input.isControllerButtonClicked(0, engine.input.buttons.Back)) {
         //     console.log("Back button Clicked");
         // }
-        // if (engine.input.isButtonReleased(0, engine.input.buttons.Back)) {
+        // if (engine.input.isControllerButtonReleased(0, engine.input.buttons.Back)) {
         //     console.log("Back button Released");
         // }
-        // if (engine.input.isButtonClicked(0, engine.input.buttons.Start)) {
+        // if (engine.input.isControllerButtonClicked(0, engine.input.buttons.Start)) {
         //     console.log("Start button Clicked");
         // }
-        // if (engine.input.isButtonReleased(0, engine.input.buttons.Start)) {
+        // if (engine.input.isControllerButtonReleased(0, engine.input.buttons.Start)) {
         //     console.log("Start button Released");
         // }
-        // if (engine.input.isButtonClicked(0, engine.input.buttons.LeftJoystickButton)) {
+        // if (engine.input.isControllerButtonClicked(0, engine.input.buttons.LeftJoystickButton)) {
         //     console.log("LeftJoystick button Clicked");
         // }
-        // if (engine.input.isButtonReleased(0, engine.input.buttons.LeftJoystickButton)) {
+        // if (engine.input.isControllerButtonReleased(0, engine.input.buttons.LeftJoystickButton)) {
         //     console.log("LeftJoystick button Released");
         // }
-        // if (engine.input.isButtonClicked(0, engine.input.buttons.RightJoystickButton)) {
+        // if (engine.input.isControllerButtonClicked(0, engine.input.buttons.RightJoystickButton)) {
         //     console.log("RightJoystick button Clicked");
         // }
-        // if (engine.input.isButtonReleased(0, engine.input.buttons.RightJoystickButton)) {
+        // if (engine.input.isControllerButtonReleased(0, engine.input.buttons.RightJoystickButton)) {
         //     console.log("RightJoystick button Released");
         // }
-        // if (engine.input.isButtonClicked(0, engine.input.buttons.PlusPadUp)) {
+        // if (engine.input.isControllerButtonClicked(0, engine.input.buttons.PlusPadUp)) {
         //     console.log("PlusPadUp button Clicked");
         // }
-        // if (engine.input.isButtonReleased(0, engine.input.buttons.PlusPadUp)) {
+        // if (engine.input.isControllerButtonReleased(0, engine.input.buttons.PlusPadUp)) {
         //     console.log("PlusPadUp button Released");
         // }
-        // if (engine.input.isButtonClicked(0, engine.input.buttons.PlusPadDown)) {
+        // if (engine.input.isControllerButtonClicked(0, engine.input.buttons.PlusPadDown)) {
         //     console.log("PlusPadDown button Clicked");
         // }
-        // if (engine.input.isButtonReleased(0, engine.input.buttons.PlusPadDown)) {
+        // if (engine.input.isControllerButtonReleased(0, engine.input.buttons.PlusPadDown)) {
         //     console.log("PlusPadDown button Released");
         // }
-        // if (engine.input.isButtonClicked(0, engine.input.buttons.PlusPadLeft)) {
+        // if (engine.input.isControllerButtonClicked(0, engine.input.buttons.PlusPadLeft)) {
         //     console.log("PlusPadLeft button Clicked");
         // }
-        // if (engine.input.isButtonReleased(0, engine.input.buttons.PlusPadLeft)) {
+        // if (engine.input.isControllerButtonReleased(0, engine.input.buttons.PlusPadLeft)) {
         //     console.log("PlusPadLeft button Released");
         // }
-        // if (engine.input.isButtonClicked(0, engine.input.buttons.PlusPadRight)) {
+        // if (engine.input.isControllerButtonClicked(0, engine.input.buttons.PlusPadRight)) {
         //     console.log("PlusPadRight button Clicked");
         // }
-        // if (engine.input.isButtonReleased(0, engine.input.buttons.PlusPadRight)) {
+        // if (engine.input.isControllerButtonReleased(0, engine.input.buttons.PlusPadRight)) {
         //     console.log("PlusPadRight button Released");
         // }
 

@@ -8,11 +8,11 @@ The current game engine only supports keyboard inputs and only a single keyboard
 ## Our API
 `function getNumControllers()`: method to get number of connected controllers `Return`: the number of controllers currently connected
 
-`function isButtonPressed(index, buttonCode)`: method to get if a button on a controller is pressed `index`: the int of the controller, i.e. index 0 is controller 1 `buttonCode`: value corresponding to the button on the controller `Return`: true if currently pressed, false if not pressed
+`function isControllerButtonPressed(index, buttonCode)`: method to get if a button on a controller is pressed `index`: the int of the controller, i.e. index 0 is controller 1 `buttonCode`: value corresponding to the button on the controller `Return`: true if currently pressed, false if not pressed
 
-`function isButtonClicked(index, buttonCode)`: method to get if a button on a controller is clicked `index`: the int of the controller, i.e. index 0 is controller 1 `buttonCode`: value corresponding to the button on the controller `Return`: true on the frame the button is pressed, false any other time
+`function isControllerButtonClicked(index, buttonCode)`: method to get if a button on a controller is clicked `index`: the int of the controller, i.e. index 0 is controller 1 `buttonCode`: value corresponding to the button on the controller `Return`: true on the frame the button is pressed, false any other time
 
-`function isButtonReleased(index, buttonCode)`: method to get if a button on a controller has been released `index`: the int of the controller, i.e. index 0 is controller 1 `buttonCode`: value corresponding to the button on the controller `Return`: true on the frame the button is released, false any other time
+`function isControllerButtonReleased(index, buttonCode)`: method to get if a button on a controller has been released `index`: the int of the controller, i.e. index 0 is controller 1 `buttonCode`: value corresponding to the button on the controller `Return`: true on the frame the button is released, false any other time
 
 `function isJoystickActive(index, joystickCode)`: method to get if a joystick on a controller has moved away from the resting position `index`: the int of the controller, i.e. index 0 is controller 1 `joystickCode`: value corresponding to which joystick on the controller is moved `Return`: true if the joystick is not at (0, 0), false if joystick is at (0, 0)
 
@@ -50,19 +50,19 @@ function update() {
 <b>NOTE</b>: For any demos accessed, AT LEAST ONE XBox controller with standard layout is required <br><br>
 Preliminary Demo (Single Controller): https://btdeguia.github.io/CSS452Proj/ <br><br>
 Final Demo (4-Player Pong): https://btdeguia.github.io/CSS452ProjFinal/ <br>
-Developer Controls: all key bindings listed on the demo for the controller can be used by pressing the same key on a keyboard
+Developer Controls: all button bindings listed on the demo for the controller can be used by pressing the same key on a keyboard
 
 ## Conclusion 
 ### Strengths: 
-- Allows the user to add multi controller support to their game by  using our API. 
-- Very similar to the keyboard support to use. 
-- Allows user to connect x-box control while game is running 
+- Allows the user to add an additional input type
+- Allows for the implementation of local multiplayer games on a single machine 
+- Very similar to the keyboard support to use
 ### Weakness: 
 - Due to the limitations of the JavaScript Gamepad class, controllers retain their position in the 'player heirarchy' when unplugged/plugged in. For example, if two controllers are plugged in, and controller 0 is unplugged and plugged back in, it will still be in the 0 index. Controller 1 will not be promoted to index 0. This can cause problems with user implementation, but it is out of the developers' hands as this is a JavaScript built-in class they cannot modify.
 - API ONLY supports XBox standard controller layout. No other controllers at this time
 
 
 ## Special Thanks/Acknowledgements
-This project was created for CSS 452: Game Engine Development at the University of Washington, Bothell. Special thanks to Professor Kelvin Sung for advising this project,<br><br>
+This project was created for CSS 452: Game Engine Development at the University of Washington, Bothell. Special thanks to Professor Kelvin Sung for advising this project<br><br>
 The majority of this code is from Build Your Own 2D Game Engine, 2nd Edition. Credit goes to the authors. Check it out here: https://apress.github.io/build-your-own-2d-game-engine-2e/<br><br>
 Some code was written using the JavaScript Gamepad API, documentation here: https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API <br><br>

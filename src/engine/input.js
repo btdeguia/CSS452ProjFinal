@@ -11,33 +11,32 @@
  * Now supports inputs from an XBox standard layout controller
  * 
  * For documentation on how this file works, see
+ * https://github.com/btdeguia/CSS452ProjFinal 
  * 
  * For documentation on how the JavaScript Gamepad class works, see
  * https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API 
  */
 "use strict";
 
-// Event handler functions *****************************************************************************************************
-
-function onKeyDown(event) {
-    mIsKeyPressed[event.keyCode] = true;
-}
-
-function onKeyUp(event) {
-    mIsKeyPressed[event.keyCode] = false;
-}
-
 // MAIN FUNCTIONS **************************************************************************************************************
 
 function cleanUp() {}  // nothing to do for now
 
-function init() {
+function init(canvasID) {
     keyboardInit();
+    if (canvasID != null) {
+        mouseInit(canvasID);
+    } else {
+        console.log("Current Game Engine version does not support mouse input");
+    }
     controllerInit();
 }
 
 function update() {
     keyboardUpdate();
+    if (mCanvas != null) { // don't get mouse data if it is not supported
+        mouseUpdate();
+    }
     controllerUpdate();
 }
 
@@ -104,6 +103,7 @@ let  mIsKeyPressed = [];
 // Click events: once an event is set, it will remain there until polled
 let  mIsKeyClicked = [];
 
+// keyboard main funcitons
 function keyboardInit() {
     let i;
     for (i = 0; i < keys.LastKeyCode; i++) {
@@ -125,6 +125,15 @@ function keyboardUpdate() {
     }
 }
 
+// keyboard event handlers
+function onKeyDown(event) {
+    mIsKeyPressed[event.keyCode] = true;
+}
+
+function onKeyUp(event) {
+    mIsKeyPressed[event.keyCode] = false;
+}
+
 // Function for GameEngine programmer to test if a key is pressed down
 function isKeyPressed(keyCode) {
     return mIsKeyPressed[keyCode];
@@ -133,6 +142,86 @@ function isKeyPressed(keyCode) {
 function isKeyClicked(keyCode) {
     return mIsKeyClicked[keyCode];
 }
+
+// MOUSE FUNCTIONS *************************************************************************************************************
+
+// mouse button enums
+const eMouseButton = Object.freeze({
+    eLeft: 0,
+    eMiddle: 1,
+    eRight: 2
+});
+
+ // Support mouse
+ let mCanvas = null;
+ let mButtonPreviousState = [];
+ let mIsButtonPressed = [];
+ let mIsButtonClicked = [];
+ let mMousePosX = -1;
+ let mMousePosY = -1;
+
+// mouse main functions
+function mouseInit(canvasID) {
+    for (let i = 0; i < 3; i++) {
+        mButtonPreviousState[i] = false;
+        mIsButtonPressed[i] = false;
+        mIsButtonClicked[i] = false;
+    }
+
+    // register handlers
+    window.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mouseup', onMouseUp);
+    window.addEventListener('mousemove', onMouseMove);
+    mCanvas = document.getElementById(canvasID);
+}
+
+function mouseUpdate() {
+    // update mouse input state
+    for (let i = 0; i < 3; i++) {
+        mIsButtonClicked[i] = (!mButtonPreviousState[i]) && mIsButtonPressed[i];
+        mButtonPreviousState[i] = mIsButtonPressed[i];
+    }
+}
+
+// mouse event handlers
+function onMouseMove(event) {
+    let inside = false;
+    let bBox = mCanvas.getBoundingClientRect();
+    // In Canvas Space now. Convert via ratio from canvas to client.
+    let x = Math.round((event.clientX - bBox.left) * (mCanvas.width / bBox.width));
+    let y = Math.round((event.clientY - bBox.top) * (mCanvas.height / bBox.height));
+
+    if ((x >= 0) && (x < mCanvas.width) &&
+        (y >= 0) && (y < mCanvas.height)) {
+        mMousePosX = x;
+        mMousePosY = mCanvas.height - 1 - y;
+        inside = true;
+    }
+    return inside;
+}
+
+function onMouseDown(event) {
+    if (onMouseMove(event)) {
+        mIsButtonPressed[event.button] = true;
+    }
+}
+
+function onMouseUp(event) {
+    onMouseMove(event);
+    mIsButtonPressed[event.button] = false;
+}
+
+// Functions for query mouse button state and position
+function isButtonPressed(button) {
+    return mIsButtonPressed[button];
+}
+
+function isButtonClicked(button) {
+    return mIsButtonClicked[button];
+}
+
+function getMousePosX() { return mMousePosX; }
+function getMousePosY() { return mMousePosY; }
 
 // CONTROLLER FUNCTIONS ********************************************************************************************************
 
@@ -190,74 +279,36 @@ let controllers = [];
 
 // NOTE: all below arrays will be MULTI-DIMENSIONAL
 // previous state for buttons
-let mButtonPreviousState = [];
+let mControllerPreviousState = [];
 // if button is currently being pressed
-let  mIsButtonPressed = [];
+let  mIsControllerButtonPressed = [];
 // if button was clicked that frame
-let  mIsButtonClicked = [];
+let  mIsControllerButtonClicked = [];
 // if button was released that frame
-let mIsButtonReleased = [];
+let mIsControllerButtonReleased = [];
 // x y positions of the joysticks
 let mJoystickState =  [];
 
 // number of controllers
 let mNumControllers = 0;
 
+// controller main functions
 function controllerInit() {
     for (let i = 0; i < 4; i++) {
-        mIsButtonPressed[i] = [];
-        mIsButtonClicked[i] = [];
-        mIsButtonReleased[i] = [];
+        mIsControllerButtonPressed[i] = [];
+        mIsControllerButtonClicked[i] = [];
+        mIsControllerButtonReleased[i] = [];
         mJoystickState[i] = [];
-        mButtonPreviousState[i] = [];
+        mControllerPreviousState[i] = [];
     }
 
 
-    window.addEventListener("gamepadconnected", (e) => {
-        console.log(e.gamepad.id + " connected");
-
-        // init all arrs for this controller
-        let buttonPressedArr = [];
-        let buttonClickedArr = [];
-        let buttonReleaseArr = [];
-        let joystickStateArr = [];
-        let previousStateArr = [];
-
-        // base population for arrs for this controller
-        for (let i = 0; i <= buttons.LastButtonCode; i++) {
-            buttonPressedArr[i] = false;
-            buttonClickedArr[i] = false;
-            buttonReleaseArr[i] = false;
-            previousStateArr[i] = false;
-        }
-        for (let i = 0; i <= joysticks_private.LastJoystickCode; i++) {
-            joystickStateArr[i] = 0;
-        }
-
-        // insert arrs into multi-dimensional arr
-        mIsButtonPressed[e.index] = buttonPressedArr;
-        mIsButtonClicked[e.index] = buttonClickedArr;
-        mIsButtonReleased[e.index] = buttonReleaseArr;
-        mJoystickState[e.index] = joystickStateArr;
-        mButtonPreviousState[e.index] = previousStateArr;
-        mNumControllers++;
-    });
-    window.addEventListener("gamepaddisconnected", (e) => {
-        console.log(e.gamepad.id + " disconnected");
-        
-        // remove all entries for this controller
-        mIsButtonPressed[e.index] = [];
-        mIsButtonClicked[e.index] = [];
-        mIsButtonReleased[e.index] = [];
-        mJoystickState[e.index] = [];
-        mButtonPreviousState[e.index] = [];
-
-        mNumControllers--;
-    });
+    window.addEventListener("gamepadconnected", onControllerConnect);
+    window.addEventListener("gamepaddisconnected", onControllerDisconnect);
 }
 
 function controllerUpdate() {
-    // get controller data every tick
+    // get controller state data every tick
     controllers = navigator.getGamepads();
     // loop supports 4 controllers, arrays only support 1 controller
     // implementation can be extended to multiple controllers by adding multi-dimensional arrays
@@ -267,11 +318,11 @@ function controllerUpdate() {
         }
         // get all controller state data
         for (let j = 0; j < controllers[i].buttons.length; j++) {
-            mIsButtonPressed[i][j] = controllers[i].buttons[j].pressed; // button pressed
+            mIsControllerButtonPressed[i][j] = controllers[i].buttons[j].pressed; // button pressed
 
-            mIsButtonClicked[i][j] = (!mButtonPreviousState[i][j]) && mIsButtonPressed[i][j]; // button clicked
-            mIsButtonReleased[i][j] = mButtonPreviousState[i][j] && !mIsButtonPressed[i][j]; // button released MUST be saved HERE or else previousState and isPressed will NEVER line up!!
-            mButtonPreviousState[i][j] = mIsButtonPressed[i][j]; // previous state
+            mIsControllerButtonClicked[i][j] = (!mButtonPreviousState[i][j]) && mIsControllerButtonPressed[i][j]; // button clicked
+            mIsControllerButtonReleased[i][j] = mControllerPreviousState[i][j] && !mIsControllerButtonPressed[i][j]; // button released MUST be saved HERE or else previousState and isPressed will NEVER line up!!
+            mControllerPreviousState[i][j] = mIsControllerButtonPressed[i][j]; // previous state
         }
         // get all controller joystick data
         for (let j = 0; j <= joysticks_private.LastJoystickCode; j++) {
@@ -280,49 +331,102 @@ function controllerUpdate() {
     }
 }
 
+// controller event handlers
+function onControllerConnect(event) {
+    console.log(event.gamepad.id + " connected");
+
+    // init all arrs for this controller
+    let buttonPressedArr = [];
+    let buttonClickedArr = [];
+    let buttonReleaseArr = [];
+    let joystickStateArr = [];
+    let previousStateArr = [];
+
+    // base population for arrs for this controller
+    for (let i = 0; i <= buttons.LastButtonCode; i++) {
+        buttonPressedArr[i] = false;
+        buttonClickedArr[i] = false;
+        buttonReleaseArr[i] = false;
+        previousStateArr[i] = false;
+    }
+    for (let i = 0; i <= joysticks_private.LastJoystickCode; i++) {
+        joystickStateArr[i] = 0;
+    }
+
+    // insert arrs into multi-dimensional arr
+    mIsControllerButtonPressed[event.index] = buttonPressedArr;
+    mIsControllerButtonClicked[event.index] = buttonClickedArr;
+    mIsControllerButtonReleased[event.index] = buttonReleaseArr;
+    mJoystickState[event.index] = joystickStateArr;
+    mControllerPreviousState[event.index] = previousStateArr;
+    mNumControllers++;
+}
+
+function onControllerDisconnect(event) {
+    console.log(event.gamepad.id + " disconnected");
+        
+    // remove all entries for this controller
+    mIsControllerButtonPressed[event.index] = [];
+    mIsControllerButtonClicked[event.index] = [];
+    mIsControllerButtonReleased[event.index] = [];
+    mJoystickState[event.index] = [];
+    mControllerPreviousState[event.index] = [];
+
+    mNumControllers--;
+} 
+
+// get number of CONNECTED controllers
 function getNumControllers() {
     return mNumControllers;
 }
 
-function isButtonPressed(index, buttonCode) {
+// Functions for query controller button state and joystick position
+function isControllerButtonPressed(index, buttonCode) {
+    // if no controllers or invalid index, return null
     if (getNumControllers() == 0) {
         return null;
     }
     if (index >= getNumControllers()) {
         return null;
     }
-    return mIsButtonPressed[index][buttonCode];
+
+    return mIsControllerButtonPressed[index][buttonCode];
 }
 
-function isButtonClicked(index, buttonCode) {
+function isControllerButtonClicked(index, buttonCode) {
+    // if no controllers or invalid index, return null
     if (getNumControllers() == 0) {
         return null;
     }
     if (index >= getNumControllers()) {
         return null;
     }
-    return mIsButtonClicked[index][buttonCode];
+
+    return mIsControllerButtonClicked[index][buttonCode];
 }
 
-function isButtonReleased(index, buttonCode) {
+function isControllerButtonReleased(index, buttonCode) {
+    // if no controllers or invalid index, return null
     if (getNumControllers() == 0) {
         return null;
     }
     if (index >= getNumControllers()) {
         return null;
     }
-    return mIsButtonReleased[index][buttonCode];
+
+    return mIsControllerButtonReleased[index][buttonCode];
 }
 
 function isJoystickActive(index, joystickCode) {
     let x = getJoystickPosX(index, joystickCode);
     let y = getJoystickPosY(index, joystickCode);
     // padding is needed because analog joysticks can never be 0 exactly
+    // joystick is arbitrarily classified as 'active' when it is above this threshold
     if (
-        x > 0.75 ||
-        x < -0.75 ||
-        y > 0.75 ||
-        y < -0.75
+        x > 0.1 ||
+        x < -0.1 ||
+        y > 0.1 ||
+        y < -0.1
     ) {
         return true;
     }
@@ -330,12 +434,14 @@ function isJoystickActive(index, joystickCode) {
 }
 
 function getJoystickPosX(index, joystickCode) {
+    // if no controllers or invalid index, return null instead of positional data
     if (getNumControllers() == 0) {
         return null;
     }
     if (index >= getNumControllers()) {
         return null;
     }
+
     let val = 0;
     if (joystickCode == 0) {
         val = mJoystickState[index][joysticks_private.LeftX]
@@ -346,12 +452,14 @@ function getJoystickPosX(index, joystickCode) {
 }
 
 function getJoystickPosY(index, joystickCode) {
+    // if no controllers or invalid index, return null instead of positional data
     if (getNumControllers() == 0) {
         return null;
     }
     if (index >= getNumControllers()) {
         return null;
     }
+    
     let val = 0;
     if (joystickCode == 0) {
         val = mJoystickState[index][joysticks_private.LeftY]
@@ -369,11 +477,17 @@ export {
     isKeyClicked,
     isKeyPressed,
 
-    buttons,
-    joysticks,
+    eMouseButton,
     isButtonClicked,
     isButtonPressed,
-    isButtonReleased,
+    getMousePosX,
+    getMousePosY,
+
+    buttons,
+    joysticks,
+    isControllerButtonClicked,
+    isControllerButtonPressed,
+    isControllerButtonReleased,
     isJoystickActive,
     getJoystickPosX,
     getJoystickPosY,
