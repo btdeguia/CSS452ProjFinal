@@ -320,7 +320,7 @@ function controllerUpdate() {
         for (let j = 0; j < controllers[i].buttons.length; j++) {
             mIsControllerButtonPressed[i][j] = controllers[i].buttons[j].pressed; // button pressed
 
-            mIsControllerButtonClicked[i][j] = (!mButtonPreviousState[i][j]) && mIsControllerButtonPressed[i][j]; // button clicked
+            mIsControllerButtonClicked[i][j] = (!mControllerPreviousState[i][j]) && mIsControllerButtonPressed[i][j]; // button clicked
             mIsControllerButtonReleased[i][j] = mControllerPreviousState[i][j] && !mIsControllerButtonPressed[i][j]; // button released MUST be saved HERE or else previousState and isPressed will NEVER line up!!
             mControllerPreviousState[i][j] = mIsControllerButtonPressed[i][j]; // previous state
         }
@@ -354,11 +354,11 @@ function onControllerConnect(event) {
     }
 
     // insert arrs into multi-dimensional arr
-    mIsControllerButtonPressed[event.index] = buttonPressedArr;
-    mIsControllerButtonClicked[event.index] = buttonClickedArr;
-    mIsControllerButtonReleased[event.index] = buttonReleaseArr;
-    mJoystickState[event.index] = joystickStateArr;
-    mControllerPreviousState[event.index] = previousStateArr;
+    mIsControllerButtonPressed[event.gamepad.index] = buttonPressedArr;
+    mIsControllerButtonClicked[event.gamepad.index] = buttonClickedArr;
+    mIsControllerButtonReleased[event.gamepad.index] = buttonReleaseArr;
+    mJoystickState[event.gamepad.index] = joystickStateArr;
+    mControllerPreviousState[event.gamepad.index] = previousStateArr;
     mNumControllers++;
 }
 
@@ -366,11 +366,11 @@ function onControllerDisconnect(event) {
     console.log(event.gamepad.id + " disconnected");
         
     // remove all entries for this controller
-    mIsControllerButtonPressed[event.index] = [];
-    mIsControllerButtonClicked[event.index] = [];
-    mIsControllerButtonReleased[event.index] = [];
-    mJoystickState[event.index] = [];
-    mControllerPreviousState[event.index] = [];
+    mIsControllerButtonPressed[event.gamepad.index] = [];
+    mIsControllerButtonClicked[event.gamepad.index] = [];
+    mIsControllerButtonReleased[event.gamepad.index] = [];
+    mJoystickState[event.gamepad.index] = [];
+    mControllerPreviousState[event.gamepad.index] = [];
 
     mNumControllers--;
 } 

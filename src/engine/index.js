@@ -47,7 +47,7 @@ import * as loop from "./core/loop.js";
 function init(htmlCanvasID) {
     glSys.init(htmlCanvasID);
     vertexBuffer.init();
-    input.init(htmlCanvasID);
+    input.init();
     audio.init();
     shaderResources.init();
     defaultResources.init();
