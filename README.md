@@ -6,26 +6,26 @@
 The current game engine only supports keyboard inputs and only a single keyboard at a time. We felt that controller input was missing. Our project allows the users to check for controller inputs, but not only for a single controller, but multiple. Our implementation made it very simple and similar to parsing keyboard inputs. In fact, the controller input code is also going to be located inside the input.js file of the game engine. 
 
 ## Our API
-`function getNumControllers()`: method to get number of connected controllers `Return`: the number of controllers currently connected
+`function getNumControllers()`: function to get number of connected controllers `Return`: the number of controllers currently connected
 
-`function isControllerButtonPressed(index, buttonCode)`: method to get if a button on a controller is pressed `index`: the int of the controller, i.e. index 0 is controller 1 `buttonCode`: value corresponding to the button on the controller `Return`: true if currently pressed, false if not pressed
+`function isControllerButtonPressed(index, buttonCode)`: function to get if a button on a controller is pressed `index`: the int of the controller, i.e. index 0 is controller 1 `buttonCode`: value corresponding to the button on the controller `Return`: true if currently pressed, false if not pressed
 
-`function isControllerButtonClicked(index, buttonCode)`: method to get if a button on a controller is clicked `index`: the int of the controller, i.e. index 0 is controller 1 `buttonCode`: value corresponding to the button on the controller `Return`: true on the frame the button is pressed, false any other time
+`function isControllerButtonClicked(index, buttonCode)`: function to get if a button on a controller is clicked `index`: the int of the controller, i.e. index 0 is controller 1 `buttonCode`: value corresponding to the button on the controller `Return`: true on the frame the button is pressed, false any other time
 
-`function isControllerButtonReleased(index, buttonCode)`: method to get if a button on a controller has been released `index`: the int of the controller, i.e. index 0 is controller 1 `buttonCode`: value corresponding to the button on the controller `Return`: true on the frame the button is released, false any other time
+`function isControllerButtonReleased(index, buttonCode)`: function to get if a button on a controller has been released `index`: the int of the controller, i.e. index 0 is controller 1 `buttonCode`: value corresponding to the button on the controller `Return`: true on the frame the button is released, false any other time
 
-`function isJoystickActive(index, joystickCode)`: method to get if a joystick on a controller has moved away from the resting position `index`: the int of the controller, i.e. index 0 is controller 1 `joystickCode`: value corresponding to which joystick on the controller is moved `Return`: true if the joystick is not at (0, 0), false if joystick is at (0, 0)
+`function isJoystickActive(index, joystickCode)`: function to get if a joystick on a controller has moved away from the resting position `index`: the int of the controller, i.e. index 0 is controller 1 `joystickCode`: value corresponding to which joystick on the controller is moved `Return`: true if the joystick is not at (0, 0), false if joystick is at (0, 0)
 
-`function getJoystickPosX(index, joystickCode)`: method to get the positional data of a joystick on a controller `index`: the int of the controller, i.e. index 0 is controller 1 `joystickCode`: value corresponding to which joystick on the controller is moved `Return`: a value from -1 to 1 corresponding to the X position of the given joystick on the given controller
+`function getJoystickPosX(index, joystickCode)`: function to get the positional data of a joystick on a controller `index`: the int of the controller, i.e. index 0 is controller 1 `joystickCode`: value corresponding to which joystick on the controller is moved `Return`: a value from -1 to 1 corresponding to the X position of the given joystick on the given controller
 
-`function getJoystickPosY(index, joystickCode)` : method to get the positional data of a joystick on a controller `index`: the int of the controller, i.e. index 0 is controller 1 `joystickCode`: value corresponding to which joystick on the controller is moved `Return`: a value from -1 to 1 corresponding to the Y position of the given joystick on the given controller
+`function getJoystickPosY(index, joystickCode)` : function to get the positional data of a joystick on a controller `index`: the int of the controller, i.e. index 0 is controller 1 `joystickCode`: value corresponding to which joystick on the controller is moved `Return`: a value from -1 to 1 corresponding to the Y position of the given joystick on the given controller
 
-## Main Methods
-`function update()`: calls method `controllerUpdate()`: loops through all connected controllers and checks the state of all buttons and joysticks. Updates internal arrays accordingly.
+## Main Functions
+`function update()`: calls function `controllerUpdate()`: loops through all connected controllers and checks the state of all buttons and joysticks. Updates internal arrays accordingly.
 
 `function draw()`: nothing to do here! input does not draw!
 
-`function init()`: calls method `controllerInit()`: sets up all internal arrays and hooks up event listeners to controllers
+`function init()`: calls function `controllerInit()`: sets up all internal arrays and hooks up event listeners to controllers
 
 `function cleanup()`: nothing to do here! controller unplugging/plugging in is handled by event listeners
 
@@ -36,11 +36,14 @@ What this means for users:
 - No need to set up anything while connecting a controller, because it's tied to `update()` in `input.js`, `update()` is constantly running and will automatically detect new controllers <br>
 
 What this means for developers of the Game Engine:
-- File is now split into three sections: `Main Methods`, `Keyboard Methods` and `Controller Methods`. Any functionality that belongs to a respective input system is located in that area of the file. Any area of the file that needs to reference another area (such as main methods) requries the functionality to be in its own method to keep organization clean
-- All main methods of `input.js` now only contain two lines of code. This keeps file organization clean. See example:
+- File is now split into four sections: `Main Functions`, `Keyboard Functions`, `Mouse Functions` and `Controller Functions`. Any functionality that belongs to a respective input system is located in that area of the file. Any area of the file that needs to reference another area (such as main functions) requries the functionality to be in its own function to keep organization clean
+- All main functions of `input.js` now only contain a few lines of code. This keeps file organization clean. See example:
 ``` JavaScript
 function update() {
     keyboardUpdate();
+    if (mCanvas != null) {
+        mouseUpdate();
+    }
     controllerUpdate();
 }
 ```
